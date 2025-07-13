@@ -12,9 +12,9 @@
   "app": {
     "windows": [
       {
-        "title": "barcoderz",
+        "title": "BarcoderZ",
         "width": 800,
-        "height": 600
+        "height": 800
       }
     ],
     "security": {
@@ -22,13 +22,19 @@
     }
   },
   "bundle": {
+    "linux": {
+      "rpm": {
+        "epoch": 0,
+        "files": {},
+        "release": "1"
+      }
+    },
     "active": true,
-    "targets": "all",
+    "targets": "rpm",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
-      "icons/icon.icns",
       "icons/icon.ico"
     ]
   }
