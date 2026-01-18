@@ -1,10 +1,11 @@
 use enigo::{Direction::Click, Enigo, Key, Keyboard, Settings};
 use std::time::Duration;
-use tauri::async_runtime::Mutex;
+use tauri::{async_runtime::Mutex, Emitter, Window};
 use tokio::time::sleep;
 
 #[tauri::command]
 async fn simulate_barcodes(
+    window: Window,
     barcodes: Vec<String>,
     initial_delay_ms: u64,
     barcode_delay_ms: u64,
@@ -28,6 +29,7 @@ async fn simulate_barcodes(
 
     // Process first barcode
     {
+        let _ = window.emit("simulation_progress", 0usize);
         let mut enigo_guard = enigo.lock().await;
         enigo_guard
             .text(&barcodes[0])
@@ -38,9 +40,10 @@ async fn simulate_barcodes(
     }
 
     // Process remaining barcodes
-    for barcode in &barcodes[1..] {
+    for (i, barcode) in barcodes.iter().enumerate().skip(1) {
         sleep(barcode_delay).await;
         {
+            let _ = window.emit("simulation_progress", i);
             let mut enigo_guard = enigo.lock().await;
             enigo_guard
                 .text(barcode)
